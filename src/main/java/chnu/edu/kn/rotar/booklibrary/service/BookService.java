@@ -2,6 +2,7 @@ package chnu.edu.kn.rotar.booklibrary.service;
 
 import chnu.edu.kn.rotar.booklibrary.model.Book;
 import chnu.edu.kn.rotar.booklibrary.repository.BookRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,14 +31,19 @@ public class BookService {
             )
     );
 
-//    @PostConstruct
-//    void init() {
-//        bookRepository.saveAll(books);
-//    }
+    @PostConstruct
+    void init() {
+        bookRepository.deleteAll();
+        bookRepository.saveAll(books);
+    }
 
 
     public List<Book> getAllBooks(){
         return bookRepository.findAll();
+    }
+
+    public List<Book> createAll(List<Book> items) {
+        return bookRepository.saveAll(items);
     }
 
     public Book addBook(Book book) {

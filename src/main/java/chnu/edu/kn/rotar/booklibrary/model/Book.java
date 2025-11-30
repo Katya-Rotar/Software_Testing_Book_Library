@@ -9,14 +9,21 @@ package chnu.edu.kn.rotar.booklibrary.model;
 */
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Data
-@ToString
-@Document
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@Builder
+@Document
 public class Book {
     @Id
     private String id;
@@ -24,6 +31,19 @@ public class Book {
     private String author;
     private int year;
     private String genre;
+
+    @CreatedDate
+    private LocalDateTime createdDate;
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
+
+    public Book(String id, String title, String author, int year, String genre) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.year = year;
+        this.genre = genre;
+    }
 
     public Book(String title, String author, int year, String genre) {
         this.title = title;
