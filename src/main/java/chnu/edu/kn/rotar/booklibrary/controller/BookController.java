@@ -9,6 +9,8 @@ package chnu.edu.kn.rotar.booklibrary.controller;
 */
 
 import chnu.edu.kn.rotar.booklibrary.model.Book;
+import chnu.edu.kn.rotar.booklibrary.request.BookCreateRequest;
+import chnu.edu.kn.rotar.booklibrary.request.BookUpdateRequest;
 import chnu.edu.kn.rotar.booklibrary.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -45,5 +47,16 @@ public class BookController {
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable String id) {
         bookService.deleteBook(id);
+    }
+
+    //============== request =====================
+    @PostMapping("/dto")
+    public Book insert(@RequestBody BookCreateRequest request) {
+        return bookService.addBook(request);
+    }
+
+    @PutMapping("/dto")
+    public Book edit(@RequestBody BookUpdateRequest request) {
+        return bookService.updateBook(request);
     }
 }

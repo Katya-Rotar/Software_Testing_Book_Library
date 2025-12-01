@@ -2,10 +2,13 @@ package chnu.edu.kn.rotar.booklibrary.service;
 
 import chnu.edu.kn.rotar.booklibrary.model.Book;
 import chnu.edu.kn.rotar.booklibrary.repository.BookRepository;
+import chnu.edu.kn.rotar.booklibrary.request.BookCreateRequest;
+import chnu.edu.kn.rotar.booklibrary.request.BookUpdateRequest;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,6 +54,42 @@ public class BookService {
             return null;
         }
         return bookRepository.save(book);
+    }
+
+    public Book addBook(BookCreateRequest request) {
+
+        if (bookRepository.existsByTitle(request.title())) {
+            throw new IllegalStateException("Book with same title already exists");
+        }
+
+        Book book = mapToBook(request);
+        book.setCreatedDate(LocalDateTime.now());
+        book.setLastModifiedDate(null);
+
+        return bookRepository.save(book);
+    }
+
+    private Book mapToBook(BookCreateRequest request) {
+        return new Book(request.title(), request.author(), request.year(), request.genre());
+    }
+
+    public Book updateBook(BookUpdateRequest request) {
+        Book persisted = bookRepository.findById(request.id()).orElse(null);
+
+        if (persisted != null) {
+            Book book = Book.builder()
+                    .id(request.id())
+                    .title(request.title())
+                    .author(request.author())
+                    .year(request.year())
+                    .genre(request.genre())
+                    .createdDate(persisted.getCreatedDate())
+                    .lastModifiedDate(LocalDateTime.now())
+                    .build();
+
+            return bookRepository.save(book);
+        }
+        return null;
     }
 
     public Book getBookById(String id) {
