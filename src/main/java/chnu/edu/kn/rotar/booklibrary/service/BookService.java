@@ -47,6 +47,9 @@ public class BookService {
     }
 
     public Book addBook(Book book) {
+        if (book.getId() != null && bookRepository.existsById(book.getId()) ) {
+            return null;
+        }
         return bookRepository.save(book);
     }
 
@@ -59,7 +62,7 @@ public class BookService {
     }
 
     public Book updateBook(Book book) {
-        if (book.getId() == null) {
+        if (book.getId() == null || !bookRepository.existsById(book.getId())) {
             return null;
         }
         return bookRepository.save(book);
